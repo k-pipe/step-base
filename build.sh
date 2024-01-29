@@ -11,6 +11,7 @@ IMAGE=$USER/$IMAGE_NAME:$IMAGE_TAG
 echo "===================================================================="
 echo "  Building docker image $IMAGE"
 echo "===================================================================="
+docker pull kpipe/step-wrapper
 docker build . -t $IMAGE
 exit
 echo "===================================================================="
