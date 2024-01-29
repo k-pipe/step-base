@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# usage: resolve-and-run ARGUMENTS COMMAND_TEMPLATE
+#
+grep -Ev "^#|^$" $2 | tr '\\\n' ' ' | sed "s#  *# #g" > $2.cleaned
+RESOLVED=`resolve $1 $2.cleaned`
+echo "Configuration:"
+grep -Ev "^#|^$"  $1
+echo ""
+echo "Command:"
+echo $RESOLVED
+step-wrapper $RESOLVED

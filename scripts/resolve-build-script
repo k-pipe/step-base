@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# This script resolves the build script from template folder
+#
+grep -Ev "^#|^$" - | resolve - /template/build.sh

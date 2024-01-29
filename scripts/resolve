@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# usage: resolve KEY_VALUE_FILE TEMPLATE_FILE
+#
+# The first parameter is supposed to point to a file with key value lines of the form "key: value"
+# (which can also be considered a simple yaml file  without nesting).
+# Comments (starting with #) or empty lines will be ignored
+#
+# The second parameter is a file in which jinja-style mentions of keys "{{key}}" will be replaced with values.
+# The result is copied to stdout.
+#
+SUBS=`grep -Ev "^#|^$" $1 | sed 's#^#s%{{#' | sed 's#:\ *#}}%#' | sed 's#$#%g;#'`
+grep -Ev "^#|^$" $2 | sed "$SUBS"
