@@ -1,6 +1,4 @@
 #!/bin/sh
-echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-echo "Tag name from github.ref_name: ${{  github.ref_name }}"
 if [ "$1" = "" ]
 then
    IMAGE_TAG=latest
