@@ -1,19 +1,19 @@
 #!/bin/sh
 USER=kpipe
-IMAGE_NAME=step-base-alpine
+IMAGE_NAME=step-base
+#-alpine
 if ["$1" = ""]
 then
-   IMAGE_TAG=latest
+   IMAGE_TAG=alpine
 else
-  IMAGE_TAG=$1
+  IMAGE_TAG=alpine-$1
 fi
 IMAGE=$USER/$IMAGE_NAME:$IMAGE_TAG
 echo "===================================================================="
 echo "  Building docker image $IMAGE"
 echo "===================================================================="
 docker pull kpipe/step-wrapper
-docker build . -t $IMAGE
-exit
+docker build . -t $IMAGE --platform linux/amd64
 echo "===================================================================="
 echo "  Logging in to dockerhub with user $USER"
 echo "===================================================================="

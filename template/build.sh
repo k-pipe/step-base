@@ -1,9 +1,13 @@
 #!/bin/sh
-if ["$1" = ""]
+if [ "$1" = "" ]
 then
    IMAGE_TAG=latest
 else
   IMAGE_TAG=$1
+fi
+if [ "$DOCKER_COMMAND" = "" ]
+then
+   DOCKER_COMMAND=docker
 fi
 IMAGE={{registry}}/{{repository}}/{{image}}:$IMAGE_TAG
 echo ""
@@ -16,13 +20,17 @@ echo Platform: {{platform}}
 echo "
 FROM {{base-image}}
 RUN apk add --no-cache {{dependencies}}
-ADD {{added-folders}} {{run-script}} /
+ADD {{added}} /
 COPY --from=kpipe/step-wrapper /bin/step-wrapper /bin/
-ADD resolve resolve-and-run /bin/
-# TODO use yaml instead of json extension
-CMD resolve-and-run /workdir/input/config.json {{run-script}}
+CMD step-wrapper {{wrapper-command}}
 " > Dockerfile
-docker build . -t $IMAGE --platform={{platform}}
+$DOCKER_COMMAND build . $DOCKER_OPTIONS -t $IMAGE --platform={{platform}}
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]
+then
+   echo "Docker build failed (exit code: $EXITCODE)" 1>&2
+   exit $EXITCODE
+fi
 echo ""
 echo "=============================="
 echo "  Authenticating to registry  "
@@ -46,7 +54,7 @@ else
    then
       echo Tests succeeded
    else
-      echo Tests failed! 1>&2
+      echo "Tests failed!" 1>&2
       exit 1
    fi
 fi
@@ -56,4 +64,4 @@ echo "  Pushing docker image  "
 echo "========================"
 echo ""
 echo "Image: $IMAGE"
-docker push $IMAGE
+$DOCKER_COMMAND push $DOCKER_OPTIONS $IMAGE
