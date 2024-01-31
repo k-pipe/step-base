@@ -1,14 +1,11 @@
 #!/bin/sh
-echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-echo "Tag name from github.ref_name: ${{  github.ref_name }}"
 USER=kpipe
 IMAGE_NAME=step-base
-#-alpine
-if [ "$1" = "" ]
+if [ "$GITHUB_REF_NAME" = "main" ]
 then
-   IMAGE_TAG=alpine
+   IMAGE_TAG=latest
 else
-  IMAGE_TAG=alpine-$1
+  IMAGE_TAG=$GITHUB_REF_NAME
 fi
 IMAGE=$USER/$IMAGE_NAME:$IMAGE_TAG
 echo "===================================================================="
