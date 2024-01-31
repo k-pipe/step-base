@@ -10,6 +10,7 @@ then
    DOCKER_COMMAND=docker
 fi
 IMAGE={{registry}}/{{repository}}/{{image}}:$IMAGE_TAG
+IMAGE_TMP=local-image
 echo ""
 echo "========================="
 echo "  Building docker image  "
@@ -24,21 +25,13 @@ ADD {{added}} /
 COPY --from=kpipe/step-wrapper /bin/step-wrapper /bin/
 CMD step-wrapper {{wrapper-command}}
 " > Dockerfile
-$DOCKER_COMMAND build . $DOCKER_OPTIONS -t $IMAGE --platform={{platform}}
+$DOCKER_COMMAND build . $DOCKER_OPTIONS -t $IMAGE_TMP --platform={{platform}}
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]
 then
    echo "Docker build failed (exit code: $EXITCODE)" 1>&2
    exit $EXITCODE
 fi
-echo ""
-echo "=============================="
-echo "  Authenticating to registry  "
-echo "=============================="
-echo ""
-echo "Registry: {{registry}}"
-USER=`gcloud auth list --filter=status:ACTIVE --format="value(account)"`
-echo "User: $USER"
 echo ""
 echo "================="
 echo "  Running tests  "
@@ -58,6 +51,13 @@ else
       exit 1
    fi
 fi
+echo ""
+echo "========================"
+echo "  Tagging docker image  "
+echo "========================"
+echo ""
+echo "Tagging: $IMAGE_TMP --> $IMAGE"
+$DOCKER_COMMAND $DOCKER_OPTIONS tag $IMAGE_TMP $IMAGE
 echo ""
 echo "========================"
 echo "  Pushing docker image  "
