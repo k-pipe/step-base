@@ -8,14 +8,15 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build the alpine docker image
       env:
         DOCKERHUB_PUSH_TOKEN: ${{ secrets.DOCKERHUB_PUSH_TOKEN }}
       run:  sh build.sh alpine
+    - name: Build the gcloud alpine docker image
+      env:
+        DOCKERHUB_PUSH_TOKEN: ${{ secrets.DOCKERHUB_PUSH_TOKEN }}
+      run:  sh build.sh alpine-gcloud

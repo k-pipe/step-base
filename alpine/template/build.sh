@@ -22,7 +22,6 @@ echo "
 FROM {{base-image}}
 RUN apk add --no-cache {{dependencies}}
 ADD {{added}} /
-COPY --from=kpipe/step-wrapper /bin/step-wrapper /bin/
 CMD step-wrapper {{wrapper-command}}
 " > Dockerfile
 $DOCKER_COMMAND build . $DOCKER_OPTIONS -t $IMAGE_TMP --platform={{platform}}
