@@ -1,6 +1,8 @@
 #!/bin/sh
+echo Flavor $1
+cd $1
 USER=kpipe
-IMAGE_NAME=step-base
+IMAGE_NAME=step-base-$1
 if [ "$GITHUB_REF_NAME" = "main" ]
 then
    IMAGE_TAG=latest
@@ -33,4 +35,5 @@ if [ $? -ne 0 ]
 then
    exit 1
 fi
+cd ..
 echo "Done"
