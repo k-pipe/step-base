@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the docker image
+    - name: Build the alpine docker image
       env:
         DOCKERHUB_PUSH_TOKEN: ${{ secrets.DOCKERHUB_PUSH_TOKEN }}
-      run:  sh build.sh latest
+      run:  sh build.sh alpine
