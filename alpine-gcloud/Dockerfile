@@ -1,5 +1,5 @@
 # use official gcloud image as build image
-FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:432.0.0 AS build
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine-432.0.0 AS build
 
 # remove unneeded stuff
 RUN rm /google-cloud-sdk/bin/anthoscli
