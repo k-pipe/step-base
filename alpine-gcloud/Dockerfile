@@ -12,7 +12,7 @@ COPY --from=build google-cloud-sdk /google-cloud-sdk
 
 # copy wrapper and build utils
 COPY --from=kpipe/step-base-alpine:latest /bin/step-wrapper /bin/resolve /bin/resolve-build-script  /bin/
-COPY --from=kpipe/step-base-alpine:latest /template /
+COPY --from=kpipe/step-base-alpine:latest /template/build.sh /template/
 
 # setup environment variables
 ENV PATH=/google-cloud-sdk/bin:$PATH
