@@ -4,11 +4,14 @@ FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:432.0.0-alpine AS build
 # remove unneeded stuff
 RUN rm /google-cloud-sdk/bin/anthoscli
 
-# build target from alpine base image
-FROM kpipe/step-base-alpine:latest
+# matching python version to the one in google cloud...
+FROM python:3.10.11-alpine
 
 # copy gcloud cli to target image
 COPY --from=build google-cloud-sdk /google-cloud-sdk
+
+# copy wrapper and build utils
+COPY --from=kpipe/step-base-alpine:latest /bin/step-wrapper /bin/resolve /bin/resolve-build-script  /bin/
 
 # setup environment variables
 ENV PATH=/google-cloud-sdk/bin:$PATH
